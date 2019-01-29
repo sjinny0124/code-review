@@ -2,7 +2,6 @@ import React from 'react';
 import './Todos.css'
 
 const Todos = (props) => {
-    console.log('------>',props)
 
     return (
         <div className="Todos">
