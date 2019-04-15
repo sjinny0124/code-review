@@ -1,37 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
-import'./App.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  Redirect
+} from "react-router-dom";
+import "./App.css";
 
 const Links = () => (
-    <nav>
-        <Link to="/home">Home</Link>
-        <Link to="/menu">Menu</Link>
-    </nav>
-);
-
-const Menu = () => (
-    <div className="menu">
-    <h1>Menu</h1>
-        <nav>                                                                                                                                                                                               
-            <Link to="/menu/food">Food</Link>
-            <Link to="/menu/drinks">Drinks</Link>
-            <Link to="/menu/sides">Sides</Link>
-        </nav>
-        
-        <Route path="/menu/:page" render={({match}) => 
-            <div>{match.params.page}</div> } />
-    </div>
+  <nav>
+    <Link to="/">Home</Link>
+    <Link to="/old">Old</Link>
+    <Link to="/new">New</Link>
+  </nav>
 );
 
 const App = () => (
-<Router>
+  <Router>
     <div>
-        <Links />
+      <Links />
+      <Switch>
         <Route exact path="/" render={() => <h1>Home</h1>} />
-        <Route path="/menu" component={Menu} />
+        <Route
+          path="/new/:id"
+          render={({ match }) => <h1>New: {match.params.id}</h1>}
+        />
+        <Route
+          path="/old/:id"
+          render={({ match }) => <Redirect to={"/new/" + match.params.id} />}
+        />
+      </Switch>
     </div>
-</Router>
+  </Router>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
