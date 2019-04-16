@@ -1,39 +1,30 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import React, { Component } from "react";
+import { FAKE_USER } from "./api";
+import LoginPage from "./pages/LoginPage";
+import MainPage from "./pages/MainPage";
 import "./App.css";
 
-const Links = () => (
-  <nav>
-    <Link to="/">Home</Link>
-    <Link to="/old">Old</Link>
-    <Link to="/new">New</Link>
-  </nav>
-);
+class App extends Component {
+  state = {
+    currentUser: FAKE_USER
+  };
 
-const App = () => (
-  <Router>
-    <div>
-      <Links />
-      <Switch>
-        <Route exact path="/" render={() => <h1>Home</h1>} />
-        <Route
-          path="/new/:id"
-          render={({ match }) => <h1>New: {match.params.id}</h1>}
-        />
-        <Route
-          path="/old/:id"
-          render={({ match }) => <Redirect to={"/new/" + match.params.id} />}
-        />
-      </Switch>
-    </div>
-  </Router>
-);
+  handleLogin = user => {
+    console.log("======로그인 성공=====>", user);
+    this.setState({ currentUser: user });
+  };
+  handleLogout = () => {
+    this.setState({ currentUser: null });
+  };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+  render() {
+    const { currentUser } = this.state;
+    return this.state.currentUser ? (
+      <MainPage user={currentUser} onLogout={this.handleLogout} />
+    ) : (
+      <LoginPage onLogin={this.handleLogin} />
+    );
+  }
+}
+
+export default App;
